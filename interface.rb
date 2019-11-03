@@ -9,8 +9,11 @@ class Interface
 
   def introduction
     puts "Greetings, #{@name}!"
+  end
+
+  def processing
     puts "=" * 40
-    puts "The game starts..."
+    puts "Processing..."
     puts "Making bets..."
   end
 

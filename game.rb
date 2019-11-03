@@ -22,12 +22,8 @@ class Game
     @interface.introduction
   end
 
-  def blackjack?
-    player.hand.score == BLACKJACK
-  end
-
-  def overflow?
-    player.hand.score > BLACKJACK
+  def processing
+    @interface.processing
   end
 
   def start
@@ -57,6 +53,7 @@ class Game
   end
 
   def start_bet
+    processing
     @player.bank.make_bet
     @dealer.bank.make_bet
     balance_info
@@ -118,20 +115,46 @@ class Game
     balance_info
   end
 
+  def player_blackjack?
+    @player.hand.score == BLACKJACK
+  end
+
+  def dealer_blackjack?
+    @dealer.hand.score == BLACKJACK
+  end
+
+  def player_no_blackjack?
+    @player.hand.score != BLACKJACK
+  end
+
+  def dealer_no_blackjack?
+    @dealer.hand.score != BLACKJACK
+  end
+
+  def player_overflowed?
+    @player.hand.score > BLACKJACK
+  end
+
+  def dealer_overflowed?
+    @dealer.hand.score > BLACKJACK
+  end 
+
+  def player_superior?
+    @player.hand.score > @dealer.hand.score
+  end
+
+  def dealer_superior?
+    @dealer.hand.score > @player.hand.score
+  end
+
   def winner
-    if @player.hand.score > BLACKJACK && @dealer.hand.score > BLACKJACK
-      return 'nobody'
-    elsif @player.hand.score == @dealer.hand.score
-      return 'draw'
-    elsif @player.hand.score > @dealer.hand.score
-      return 'player'
-    elsif @dealer.hand.score > @player.hand.score
-      return 'dealer'
-    elsif @player.hand.score <= BLACKJACK && @player.hand.score > @dealer.hand.score
-      return 'player'
-    elsif @dealer.hand.score <= BLACKJACK && @dealer.hand.score > @player.hand.score
-      return 'dealer'
-    end
+    player_score = @player.hand.score
+    dealer_score = @dealer.hand.score
+
+    return "draw"   if player_score == dealer_score
+    return "nobody" if player_overflowed? && dealer_overflowed?
+    return "player" if (player_superior? && player_score <= BLACKJACK) || dealer_overflowed? || (player_blackjack? && dealer_no_blackjack?)
+    return "dealer" if (dealer_superior? && dealer_score <= BLACKJACK) || player_overflowed? || (dealer_blackjack? && player_no_blackjack?)
   end
 
   def return_bet(*participants)

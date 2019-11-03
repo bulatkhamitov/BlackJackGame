@@ -1,19 +1,34 @@
 class Card
-  attr_reader :rank, :suit, :value
+  attr_reader :rank, :suit
+
+  RANKS = [*(2..10), 'J', 'Q', 'K', 'A'].freeze
+  SUITS = ['♣', '♥', '♠', '♦'].freeze
 
   def initialize(rank, suit)
-    @rank  = rank
-    @suit  = suit
-    @value = value
+    @rank = rank
+    @suit = suit
+    validate!
   end
 
-  def value
-    if @rank.class == Fixnum
-      @value = @rank
-    elsif @rank == 'A'
-      @value = 1
-    else
-      @value = 10
-    end
+  def face_card?
+  	['J', 'Q', 'K'].include?(@rank)
+  end
+
+  def ace_card?
+  	['A'].include?(@rank)
+  end
+
+  private
+
+  def validate!
+  	raise ArguementError, "#{@suit} is not permitted" unless SUITS.include?(@suit)
+  	raise ArguementError, "#{@rank} is not permitted" unless RANKS.include?(@rank)
+  end
+
+  def valid?
+  	validate!
+  	true
+  rescue ArguementError
+  	false
   end
 end
