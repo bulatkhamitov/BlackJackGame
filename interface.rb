@@ -59,6 +59,16 @@ class Interface
     end
   end
 
+  def dealer_win(player_balance)
+    puts "=" * 40
+    puts "Your balance: #{player_balance}. No money to play"
+  end
+
+  def player_win(player_balance)
+    puts "=" * 40
+    puts "Dealer's balance: #{player_balance}. You won"
+  end
+
   def play_again_message
     puts "=" * 40
     puts "Play again?"

@@ -3,7 +3,9 @@ class Deck
 
   def initialize
     @cards = []
+  end
 
+  def build_deck
     Card::RANKS.each do |rank|
       Card::SUITS.each do |suit|
         @cards << Card.new(rank, suit)
@@ -17,7 +19,6 @@ class Deck
   end
 
   def deal
-    raise "No cards left" if @cards.empty?
     @cards.shift
   end
 end
